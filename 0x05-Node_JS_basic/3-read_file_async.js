@@ -2,7 +2,7 @@ const fs = require('fs');
 
 function countStudents(path) {
   return new Promise((resolve, reject) => {
-    fs.readFile(path, 'utf', (err, data) => {
+    fs.readFile(path, 'utf8', (err, data) => {
       if (err) {
         reject(Error('Cannot load the database'));
         return;
@@ -13,7 +13,7 @@ function countStudents(path) {
       const content = data.toString().split('\n');
 
       let students = content.filter((item) => item);
-	
+
       students = students.map((item) => item.split(','));
 
       const NUMBER_OF_STUDENTS = students.length ? students.length - 1 : 0;
@@ -25,10 +25,10 @@ function countStudents(path) {
       const fields = {};
       for (const i in students) {
         if (i !== 0) {
-	  if (ifields[students[i][3]]) fields[students[i][3]] = [];
+          if (!fields[students[i][3]]) fields[students[i][3]] = [];
 
-	  field[students[i][3]].push(students[i][0]);
-	}
+          fields[students[i][3]].push(students[i][0]);
+        }
       }
 
       delete fields.field;
@@ -36,15 +36,15 @@ function countStudents(path) {
       for (const key of Object.keys(fields)) {
         msg = `Number of students in ${key}: ${
           fields[key].length
-	}. List: ${fields[key].join(', ')}`;
+        }. List: ${fields[key].join(', ')}`;
 
-      console.log(msg);
+        console.log(msg);
 
-      response.push(msg);
-    }
-    resolve(response);
+        response.push(msg);
+      }
+      resolve(response);
+    });
   });
-});
 }
 
 module.exports = countStudents;
